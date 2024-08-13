@@ -60,3 +60,5 @@ http://localhost:8080
 | GET    | /categories      | Retrieve all categories    |
 | GET    | /categories/{id} | Retrieve a category by ID  |
 
+## Author
+- [Arthur Vicente](https://www.linkedin.com/in/arthurpvicente/)
