@@ -2,15 +2,16 @@
 
 This project is an API Management System developed using Spring Boot. It manages users, categories, incomes, and outgoings, providing RESTful endpoints for CRUD operations on these entities.
 
-## Features
+### Features
 
-- User Management: Create, update, delete, and retrieve users.
-- Income Management: Record and track income entries.
-- Outgoing Management: Record and track outgoing entries.
-- Category Management: Manage categories associated with income and outgoing records.
-- Data Initialization: Preloads the database with test data in the development profile.
+- **User Management**: Create, update, delete, and retrieve users.
+- **Income Management**: Record and track income entries.
+- **Outgoing Management**: Record and track outgoing entries.
+- **Category Management**: Manage categories associated with income and outgoing records.
+- **Data Initialization**: Preloads the database with test data in the development profile.
+---
 
-## Technologies Used
+### Technologies Used
 
 - Java 17
 - Spring Boot
@@ -18,33 +19,37 @@ This project is an API Management System developed using Spring Boot. It manages
 - H2 Database (for testing and development)
 - Maven
 - Postman (for API testing)
+---
 
-## Installation
+### Installation
 
-1. Clone the reppsitory:
+1. Clone the repository:
 
-```sh
-git clone https://github.com/your-username/api-management-system.git
-```
+    ```sh
+    git clone https://github.com/your-username/api-management-system.git
+    ```
+
 2. Build the project:
 
-```sh
-mvn clean isntall
-```
+    ```sh
+    mvn clean install
+    ```
+
 3. Run the application:
 
-```sh
-mvn spring-boot:run
-```
-4. Access the API endpoints using Postman.
+    ```sh
+    mvn spring-boot:run
+    ```
 
-```sh
-http://localhost:8080
-```
+4. Access the API endpoints using Postman:
 
-# API Endpoints
+    ```sh
+    http://localhost:8080
+    ```
 
-### **You can test the API endpoints using Postman below:**
+### API Endpoints
+
+#### **You can test the API endpoints using Postman below:**
 
 | Method | Endpoint         | Description                |
 |--------|------------------|----------------------------|
@@ -61,4 +66,5 @@ http://localhost:8080
 | GET    | /categories/{id} | Retrieve a category by ID  |
 
 ## Author
+
 - [Arthur Vicente](https://www.linkedin.com/in/arthurpvicente/)
