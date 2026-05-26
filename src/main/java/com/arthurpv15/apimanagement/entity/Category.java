@@ -2,7 +2,6 @@ package com.arthurpv15.apimanagement.entity;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -15,9 +14,6 @@ public class Category implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
-    /*
-     * Serve to generate ID in the moment of adding the entity in the databases.
-     */
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
@@ -56,7 +52,7 @@ public class Category implements Serializable{
         return incomes;
     }
 
-    public List<Outgoing> getOutcomes() {
+    public List<Outgoing> getOutgoings() {
         return outgoings;
     }
 
@@ -64,10 +60,10 @@ public class Category implements Serializable{
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        if (obj == null || getClass() !=obj.getClass())
+        if (obj == null || getClass() != obj.getClass())
             return false;
-            Category category = (Category) obj;
-            return id.equals(category.id);
+        Category category = (Category) obj;
+        return id.equals(category.id);
     }
 
     @Override

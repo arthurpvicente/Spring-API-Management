@@ -8,6 +8,8 @@ import java.util.Objects;
 import com.arthurpv15.apimanagement.enums.IncomeStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.persistence.*;
 
 
@@ -18,12 +20,10 @@ public class Income implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
-    /*
-     * Serve to generate ID in the moment of adding entity in the databases.
-     */
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    @Column(name = "amount")
     private Double value;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm:ss", timezone = "GMT-3")
     private Instant date;
@@ -107,6 +107,11 @@ public class Income implements Serializable{
 
     public void setCategoryIncome(Category categoryIncome) {
         this.categoryIncome = categoryIncome;
+    }
+
+    @JsonProperty("userId")
+    public Long getUserId() {
+        return user != null ? user.getId() : null;
     }
 
     @Override

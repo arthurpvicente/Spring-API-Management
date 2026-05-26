@@ -3,41 +3,46 @@ package com.arthurpv15.apimanagement.config;
 import java.time.Instant;
 import java.util.Arrays;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.arthurpv15.apimanagement.entity.Category;
+import com.arthurpv15.apimanagement.entity.Income;
+import com.arthurpv15.apimanagement.entity.Outgoing;
+import com.arthurpv15.apimanagement.entity.User;
 import com.arthurpv15.apimanagement.enums.IncomeStatus;
 import com.arthurpv15.apimanagement.enums.OutgoingStatus;
 import com.arthurpv15.apimanagement.repository.CategoryRepository;
 import com.arthurpv15.apimanagement.repository.IncomeRepository;
 import com.arthurpv15.apimanagement.repository.OutgoingRepository;
 import com.arthurpv15.apimanagement.repository.UserRepository;
-import com.arthurpv15.apimanagement.entity.Category;
-import com.arthurpv15.apimanagement.entity.User;
-import com.arthurpv15.apimanagement.entity.Income;
-import com.arthurpv15.apimanagement.entity.Outgoing;
-
 
 @Configuration
-@Profile("test")
-public class TestConfig implements CommandLineRunner{
+@Profile("teste")
+public class TestConfig implements CommandLineRunner {
 
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private IncomeRepository incomeRepository;
-    @Autowired
-    private OutgoingRepository outgoingRepository;
-    @Autowired
-    private CategoryRepository categoryRepository;
-    
+    private final UserRepository userRepository;
+    private final IncomeRepository incomeRepository;
+    private final OutgoingRepository outgoingRepository;
+    private final CategoryRepository categoryRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public TestConfig(UserRepository userRepository, IncomeRepository incomeRepository,
+                      OutgoingRepository outgoingRepository, CategoryRepository categoryRepository,
+                      PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.incomeRepository = incomeRepository;
+        this.outgoingRepository = outgoingRepository;
+        this.categoryRepository = categoryRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
-    public void run(String... args) throws Exception {
-        User user1 = new User("Arthur", "arthurpvicente@outlook.com", "123456");
-        User user2 = new User("Matheus", "matheus@gmail.com", "123456");
+    public void run(String... args) {
+        User user1 = new User("Arthur", "arthur@example.com", passwordEncoder.encode("123456"));
+        User user2 = new User("Matheus", "matheus@example.com", passwordEncoder.encode("123456"));
 
         userRepository.saveAll(Arrays.asList(user1, user2));
 
@@ -55,10 +60,9 @@ public class TestConfig implements CommandLineRunner{
         incomeRepository.saveAll(Arrays.asList(income1, income2, income3));
 
         Outgoing outgoing1 = new Outgoing("Clothes", 100.00, Instant.now(), OutgoingStatus.PAID, user1, category1);
-        Outgoing outgoing2 = new Outgoing("Employer", 150.00, Instant.now(), OutgoingStatus.LATE, user1, category4);
+        Outgoing outgoing2 = new Outgoing("Rent", 150.00, Instant.now(), OutgoingStatus.LATE, user1, category4);
         Outgoing outgoing3 = new Outgoing("Lunch", 25.00, Instant.now(), OutgoingStatus.PAID, user1, category2);
 
         outgoingRepository.saveAll(Arrays.asList(outgoing1, outgoing2, outgoing3));
-
     }
 }

@@ -7,6 +7,8 @@ import java.util.Objects;
 
 import com.arthurpv15.apimanagement.enums.OutgoingStatus;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.*;
 
@@ -17,17 +19,16 @@ public class Outgoing implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
-    /*
-     * Serve to generate ID in the moment of adding the entity in the databases.
-     */
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    @Column(name = "amount")
     private Double value;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm:ss",  timezone = "GMT-3")
     private Instant date;
     private Integer status;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -105,6 +106,11 @@ public class Outgoing implements Serializable{
 
     public void setCategoryOutgoing(Category categoryOutgoing) {
         this.categoryOutgoing = categoryOutgoing;
+    }
+
+    @JsonProperty("userId")
+    public Long getUserId() {
+        return user != null ? user.getId() : null;
     }
 
     @Override
