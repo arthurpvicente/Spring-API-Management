@@ -17,10 +17,10 @@ import com.arthurpv15.apimanagement.entity.Outgoing;
 import com.arthurpv15.apimanagement.entity.User;
 import com.arthurpv15.apimanagement.enums.IncomeStatus;
 import com.arthurpv15.apimanagement.enums.OutgoingStatus;
+import com.arthurpv15.apimanagement.repository.UserRepository;
 import com.arthurpv15.apimanagement.services.CategoryService;
 import com.arthurpv15.apimanagement.services.IncomeService;
 import com.arthurpv15.apimanagement.services.OutgoingService;
-import com.arthurpv15.apimanagement.repository.UserRepository;
 
 @Service
 public class WhatsAppBotService {
@@ -31,18 +31,15 @@ public class WhatsAppBotService {
     private final IncomeService incomeService;
     private final OutgoingService outgoingService;
     private final CategoryService categoryService;
-    private final EmailService emailService;
     private final ConcurrentHashMap<String, PendingEntry> pendingEntries = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, PendingVerification> pendingVerifications = new ConcurrentHashMap<>();
 
     public WhatsAppBotService(UserRepository userRepository, IncomeService incomeService,
-                              OutgoingService outgoingService, CategoryService categoryService,
-                              EmailService emailService) {
+                              OutgoingService outgoingService, CategoryService categoryService) {
         this.userRepository = userRepository;
         this.incomeService = incomeService;
         this.outgoingService = outgoingService;
         this.categoryService = categoryService;
-        this.emailService = emailService;
     }
 
     public String processMessage(String from, String body) {
@@ -100,9 +97,7 @@ public class WhatsAppBotService {
         String code = String.format("%06d", RANDOM.nextInt(1_000_000));
         pendingVerifications.put(from, new PendingVerification(email, code, Instant.now()));
 
-        emailService.sendVerificationCode(email, code);
-
-        return "If that account exists, a verification code has been generated.\nUse /verify <code> to complete linking.";
+        return "Your verification code is: " + code + "\nReply with /verify " + code + " to link your account. (Expires in 5 minutes)";
     }
 
     private String handleVerify(String from, String text) {
