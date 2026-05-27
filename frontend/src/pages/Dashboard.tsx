@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api } from '../api/client';
 import FinanceChart from '../components/FinanceChart';
 import { usePolling } from '../hooks/usePolling';
@@ -24,7 +24,18 @@ export default function Dashboard() {
   const [outgoings, setOutgoings] = useState<Outgoing[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchData = useCallback(async () => {
+  useEffect(() => {
+    Promise.all([
+      api.get<Income[]>('/incomes'),
+      api.get<Outgoing[]>('/outgoings'),
+    ]).then(([inc, out]) => {
+      setIncomes(inc);
+      setOutgoings(out);
+      setLoading(false);
+    });
+  }, []);
+
+  const fetchData = async () => {
     const [inc, out] = await Promise.all([
       api.get<Income[]>('/incomes'),
       api.get<Outgoing[]>('/outgoings'),
@@ -32,11 +43,7 @@ export default function Dashboard() {
     setIncomes(inc);
     setOutgoings(out);
     setLoading(false);
-  }, []);
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  };
 
   usePolling(fetchData, 30000);
 
