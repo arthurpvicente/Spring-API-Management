@@ -26,7 +26,7 @@ export default function FinanceChart({ data }: Props) {
         <YAxis tick={{ fontSize: 12, fill: tickFill }} />
         <Tooltip
           contentStyle={tooltipStyle}
-          formatter={(value: number) => [`$${value.toFixed(2)}`, '']}
+          formatter={(value) => [`$${Number(value).toFixed(2)}`, '']}
         />
         <Legend />
         <Bar dataKey="income" fill="#22c55e" radius={[4, 4, 0, 0]} name="Income" />
