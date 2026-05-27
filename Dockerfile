@@ -10,5 +10,5 @@ RUN ./mvnw clean package -DskipTests -q
 FROM eclipse-temurin:22-jre
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
-EXPOSE 8081
+EXPOSE ${PORT:-8081}
 ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-jar", "app.jar"]
