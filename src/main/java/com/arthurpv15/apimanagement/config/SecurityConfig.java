@@ -1,7 +1,9 @@
 package com.arthurpv15.apimanagement.config;
 
+import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,9 @@ import com.arthurpv15.apimanagement.security.JwtAuthenticationFilter;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Value("${cors.allowed-origins:http://localhost:5173,http://localhost:8080}")
+    private String allowedOriginsRaw;
 
     private final JwtAuthenticationFilter jwtAuthFilter;
 
@@ -58,7 +63,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://localhost:8080"));
+        configuration.setAllowedOrigins(Arrays.asList(allowedOriginsRaw.split(",")));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
