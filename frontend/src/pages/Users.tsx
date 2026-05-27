@@ -26,10 +26,14 @@ export default function Users() {
   const fetchUsers = async () => {
     const data = await api.get<User[]>('/users');
     setUsers(data);
-    setLoading(false);
   };
 
-  useEffect(() => { fetchUsers(); }, []);
+  useEffect(() => {
+    api.get<User[]>('/users').then(data => {
+      setUsers(data);
+      setLoading(false);
+    });
+  }, []);
 
   const openCreate = () => {
     setForm(emptyForm);
