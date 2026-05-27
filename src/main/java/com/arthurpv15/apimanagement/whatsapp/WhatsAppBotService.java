@@ -31,15 +31,18 @@ public class WhatsAppBotService {
     private final IncomeService incomeService;
     private final OutgoingService outgoingService;
     private final CategoryService categoryService;
+    private final EmailService emailService;
     private final ConcurrentHashMap<String, PendingEntry> pendingEntries = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<String, PendingVerification> pendingVerifications = new ConcurrentHashMap<>();
 
     public WhatsAppBotService(UserRepository userRepository, IncomeService incomeService,
-                              OutgoingService outgoingService, CategoryService categoryService) {
+                              OutgoingService outgoingService, CategoryService categoryService,
+                              EmailService emailService) {
         this.userRepository = userRepository;
         this.incomeService = incomeService;
         this.outgoingService = outgoingService;
         this.categoryService = categoryService;
+        this.emailService = emailService;
     }
 
     public String processMessage(String from, String body) {
@@ -97,10 +100,7 @@ public class WhatsAppBotService {
         String code = String.format("%06d", RANDOM.nextInt(1_000_000));
         pendingVerifications.put(from, new PendingVerification(email, code, Instant.now()));
 
-        // In production, send the code via email instead of returning it in chat.
-        // For now, log it server-side.
-        org.slf4j.LoggerFactory.getLogger(WhatsAppBotService.class)
-                .info("Verification code for {}: {}", email, code);
+        emailService.sendVerificationCode(email, code);
 
         return "If that account exists, a verification code has been generated.\nUse /verify <code> to complete linking.";
     }
