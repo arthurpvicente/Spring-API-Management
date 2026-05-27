@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api/client';
+import { usePolling } from '../hooks/usePolling';
 
 interface Outgoing {
   id: number;
@@ -73,6 +74,8 @@ export default function Outgoings() {
       setLoading(false);
     });
   }, []);
+
+  usePolling(fetchOutgoings, 30000);
 
   const openCreate = () => {
     setForm({

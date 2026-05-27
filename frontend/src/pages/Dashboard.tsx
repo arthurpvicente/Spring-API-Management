@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { api } from '../api/client';
 import FinanceChart from '../components/FinanceChart';
+import { usePolling } from '../hooks/usePolling';
 
 interface Income {
   id: number;
@@ -23,16 +24,21 @@ export default function Dashboard() {
   const [outgoings, setOutgoings] = useState<Outgoing[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    Promise.all([
+  const fetchData = useCallback(async () => {
+    const [inc, out] = await Promise.all([
       api.get<Income[]>('/incomes'),
       api.get<Outgoing[]>('/outgoings'),
-    ]).then(([inc, out]) => {
-      setIncomes(inc);
-      setOutgoings(out);
-      setLoading(false);
-    });
+    ]);
+    setIncomes(inc);
+    setOutgoings(out);
+    setLoading(false);
   }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  usePolling(fetchData, 30000);
 
   const totalIncome = incomes.reduce((sum, i) => sum + i.value, 0);
   const totalOutgoing = outgoings.reduce((sum, o) => sum + o.value, 0);
